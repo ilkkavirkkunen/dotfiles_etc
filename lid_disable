@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo 'PNP0C0D:00' | sudo tee /sys/bus/acpi/drivers/button/unbind
