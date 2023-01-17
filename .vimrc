@@ -20,6 +20,9 @@ set background=dark
 
 filetype plugin indent on
 
+au BufEnter,BufWinEnter,BufNewFile,BufRead *.sc,*.scd set filetype=supercollider
+au Filetype supercollider packadd scvim
+
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
 if has("autocmd")

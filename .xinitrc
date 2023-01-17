@@ -4,7 +4,12 @@
 
 setxkbmap -layout us -variant altgr-intl -option ctrl:nocaps &
 
-xinput set-prop 11 311 -0.7
+xinput set-prop 11 311 -0.7 &
+lid_disable &
+amixer set Master unmute &
+amixer set Master 60 &
+amixer set Speaker 100 &
+
 while true
 do
     xsetroot -name "$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage | sed 's/percentage: *//;s/(.*//' )  $( amixer get Master | grep "Mono: Playback" | sed 's/.* [0-9]* //;s/ \[[-0-9\.]*dB.*//;s/%//' ) $(date +' %j %d.%m.%Y  %H:%M:%S %z')"
