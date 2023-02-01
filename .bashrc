@@ -13,6 +13,7 @@ source /etc/lscolors
 
 alias ls='ls --color=auto --human-readable --group-directories-first'
 alias tube='youtube-dl --restrict-filenames'
+alias cal='cal -m'
 # alias src='cd /usr/local/src'
 # alias doom='cd /usr/local/share/doom'
 
@@ -24,8 +25,8 @@ HISTFILESIZE=100000
 HISTCONTROL=ignorespace:ignoredups
 shopt -s histappend
 shopt -s histverify
-#export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-history -a; history -c; history -r
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+#history -a; history -c; history -r
 
 # set colored-stats On
 # set completion-ignore-case On
