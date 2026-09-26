@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ "$(ls -l ~ | grep porssisahko | awk '{ print $6 $7 }')" != "$(date +'%b%-d')" || -z "$(cat porssisahko)" ]]; then
+    curl https://www.porssisahkoa.fi >porssisahko
+fi
+sulut="$( tr -cd '{' <~/porssisahko | wc -c )"
+arvot=$( cut -d '{' -f "$((sulut - 215))"-"$sulut" <~/porssisahko | cut -d '}' -f 1-119 )
+
+echo "Aika    Tunti-  Minuuttihinnat"
+echo "        hinta   00  15  30  45"
+echo "$arvot" | sed -e 's/{*"time":"[0-9-]\{10\}T//g' -e 's/:00+[0-9:]\{5\}","value":/\t/g' -e 's/"min15Points":[][{}]*,*//g' -e 's/\.[0-9]*//g' -e 's/:00\t\([0-9]*\),[0-9:]*\t\([0-9]*\),[0-9:]*\t\([0-9]*\),[0-9:]*\t\([0-9]*\),[0-9:]*\t\([0-9]*\)/\t\1\t\2  \3  \4  \5/g' -e 's/\([ \t][0-9]\) /\1  /g' | tr ',' '\n'
