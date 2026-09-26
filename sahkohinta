@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ "$(ls -l ~ | grep porssisahko | awk '{ print $6 $7 }')" != "$(date +'%b%-d')" || -z "$(cat porssisahko)" ]]; then
+    curl https://www.porssisahkoa.fi >porssisahko
+    sulut="$( tr -cd '{' <~/porssisahko | wc -c )"
+    arvot=$( cut -d '{' -f "$((sulut - 214))"-"$sulut" <~/porssisahko | cut -d '}' -f 1-119 )
+    echo "$arvot" | sed -e 's/{*"time":"[0-9-]\{10\}T//g' -e 's/:00+[0-9:]\{5\}","value":/\t/g' -e 's/"min15Points":[][{}]*,*//g' -e 's/\(:45\t[0-9.]*\),[0-9:. \t]*/\1/g' -e 's/\.[0-9]*//g' | tr ',' '\n' >~/sahkohinnat
+#    echo "$arvot" | sed -e 's/{*"time":"[0-9-]\{10\}T//g' -e 's/:00:00+[0-9:]\{5\}","value":/\t/g' -e 's/\(\.*[0-9]\{0,3\}\)[0-9]*}*/\1/g' | tr ',' '\n' >~/sahkohinnat
+fi
+
+min="$(date +%M)"
+if [[ $min -lt 15 ]]; then
+    min=00
+elif [[ $min -lt 30 ]]; then
+    min=15
+elif [[ $min -lt 45 ]]; then
+    min=30
+else
+    min=45
+fi
+cat sahkohinnat | sed -n -e 's/^'"$(date +%H)"':'"$min"'[ \t]*\([0-9\.-]*\)/\1 c\/kWh/p'
